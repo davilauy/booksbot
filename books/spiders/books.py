@@ -6,7 +6,7 @@ class BooksSpider(scrapy.Spider):
     name = "books"
     allowed_domains = ["books.toscrape.com"]
     start_urls = [
-        'http://books.toscrape.com/',
+        'https://listado.mercadolibre.com.uy/notebook#D[A:notebook]',
     ]
 
     def parse(self, response):
@@ -20,11 +20,5 @@ class BooksSpider(scrapy.Spider):
         item = {}
         product = response.css("div.product_main")
         item["title"] = product.css("h1 ::text").extract_first()
-        item['category'] = response.xpath(
-            "//ul[@class='breadcrumb']/li[@class='active']/preceding-sibling::li[1]/a/text()"
-        ).extract_first()
-        item['description'] = response.xpath(
-            "//div[@id='product_description']/following-sibling::p/text()"
-        ).extract_first()
         item['price'] = response.css('p.price_color ::text').extract_first()
         yield item
